@@ -30,11 +30,57 @@ sta = time.time()
 
 updated_killers = []
 updated_killees = []
+reader = easyocr.Reader(['en'], gpu=True)  # Initialize the EasyOCR reader with desired languages
 
-for j in range(2):
+for j in range(4):
 
     image = cv2.imread(f'./picture/image{j+1}.png')
     height, width, _ = image.shape
+
+    part1_weap1 = image[int(906 * height / 1440):int(925 * height / 1440),
+                  int(2100 * width / 2560):int(2530 * width / 2560)]  # top
+    part1_weap2 = image[int(1012 * height / 1440):int(1042 * height / 1440),
+                  int(2100 * width / 2560):int(2530 * width / 2560)]
+    part1_weap3 = image[int(1118 * height / 1440):int(1148 * height / 1440),
+                  int(2100 * width / 2560):int(2530 * width / 2560)]
+    part1_weap4 = image[int(1224 * height / 1440):int(1254 * height / 1440),
+                  int(2100 * width / 2560):int(2530 * width / 2560)]
+    part1_weap5 = image[int(1341 * height / 1440):int(1360 * height / 1440),
+                  int(2100 * width / 2560):int(2530 * width / 2560)]  # bottom
+    part1_concate = np.concatenate((part1_weap1, part1_weap2, part1_weap3, part1_weap4, part1_weap5),
+                                   axis=0)  # vertical
+
+    results = reader.readtext(part1_concate, allowlist='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ',
+                              paragraph=True)
+
+    print(' '.join([result[1] for result in results]))
+    # HP and AC
+    part2_hp = image[int(1380 * height / 1440):int(1428 * height / 1440),
+               int(78 * width / 2560):int(153 * width / 2560)]
+    part2_ac = image[int(1380 * height / 1440):int(1428 * height / 1440),
+               int(354 * width / 2560):int(429 * width / 2560)]
+    part2_concate = np.concatenate((part2_hp, part2_ac), axis=0)
+
+    results = reader.readtext(part2_concate, allowlist='0123456789',
+                              paragraph=True)
+
+    print(' '.join([result[1] for result in results]))
+
+    part3_money = image[int(470 * height / 1440):int(530 * height / 1440),
+                  int(60 * width / 2560):int(190 * width / 2560)]
+
+    results = reader.readtext(part3_money, allowlist='0123456789',
+                              paragraph=True)
+
+    print(' '.join([result[1] for result in results]))
+
+    part4_magaz = image[int(1382 * height / 1440):int(1420 * height / 1440),
+                  int(2280 * width / 2560):int(2445 * width / 2560)]
+
+    results = reader.readtext(part4_magaz, allowlist='0123456789',
+                              paragraph=True)
+
+    print(' '.join([result[1] for result in results]))
 
     part4_kill1 = image[int(100 * height / 1440):int(143 * height / 1440),
                   int(2000 * width / 2560):int(2550 * width / 2560)]
@@ -49,7 +95,6 @@ for j in range(2):
 
     part4_concate = np.concatenate((part4_kill1, part4_kill2, part4_kill3, part4_kill4, part4_kill5),
                                    axis=0)  # vertical
-    reader = easyocr.Reader(['en'])  # Initialize the EasyOCR reader with desired languages
 
     killers = []
     killees = []
@@ -107,3 +152,4 @@ print(updated_killees)
 
 end = time.time()
 print(end-sta)
+
