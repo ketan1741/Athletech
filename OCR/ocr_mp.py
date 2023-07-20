@@ -4,9 +4,10 @@ import cv2
 import time
 import Levenshtein
 import numpy as np
+from datetime import datetime
 import cv2
 import json
-list = ['BOT Dennis', 'BOT Bill', 'Bot Martin', 'BOT Colin', 'BOT Keith', 'ztdtwy', 'BOT Elliot']
+list = ['BOT Dennis', 'BOT Bill', 'Bot Martin', 'BOT Colin', 'BOT Keith', 'ztdtwy', 'BOT Elliot', 'athletechyinzcam']
 weapon_list = ['AWP', 'G3SG1', 'Galil AR', 'M4A4', 'M4A1-S', 'SCAR-20', 'SG 553', 'SSG 08', '	FAMAS',
                'AUG', 'AK-47', 'USP-S', 'Tec-9', 'Glock-18', 'Desert Eagle', 'P250', 'Dual Berettas', 'XM1014',
                'Sawed-Off', 'M249', 'Negev', 'Riot Shield', 'Nova', 'MAC-10', 'MP7', 'UMP-45', 'P90', 'PP-Bizon',
@@ -21,20 +22,24 @@ def read_frames(frame_queue, index):
     # this function will read frames from the video
     time_list = []
     cap = cv2.VideoCapture('rtmp://localhost/live/stream')
-
+    sta = time.time()
+    dat = datetime.fromtimestamp(sta)
+    print('start streaming:{}'.format(dat.strftime('%Y-%m-%d-%H-%M-%S-') + f'{dat.microsecond // 1000:03}'))
     while True:
         ret, image = cap.read()
         current = time.time()
         time_list.append(current)
-
+        
         if not ret:
             break
 
         # put the frame into the queue to be processed
         frame_queue.put(image)
         index += 1
-        if index == 100:
+        if index == 1000:
+            end = time.time()
             frame_queue.put(None)  # signal that we are done reading frames
+            print(end-sta)
             # print("Reading frame time is ")
             # print(time_list)
             break
@@ -50,18 +55,23 @@ def process_frame(frame_queue):
     hp_ac = []
     updated_killers = []
     updated_killees = []
+    sta = time.time()
+    dat = datetime.fromtimestamp(sta)
+
+    last_hp = 100
+    last_ac = 100
+
+    print('start processing:{}'.format(dat.strftime('%Y-%m-%d-%H-%M-%S-') + f'{dat.microsecond // 1000:03}'))
     while True:
         image = frame_queue.get()  # get a frame from the queue
         if image is None:
             break
         # Capture frame-by-frame
         ctime = time.time()
-
-        name = 'result/' +  str(ctime) + '.png'
-        cv2.imwrite(name, image)
-
             # Do image processing here
         # if index % 600 == 0:
+        name = 'result/' +  str(ctime) + '.png'
+        cv2.imwrite(name, image)
         # name = 'result/Frame'+str(index)+'.png'
         # cv2.imwrite(name, image)
         height, width, _ = image.shape
@@ -95,36 +105,62 @@ def process_frame(frame_queue):
         # print(weapon_name)
 
         data_dict[str(ctime)]['weapon'] = weapon_name
-
-
         # HP and AC
-        part2_hp = np.pad(cv2.cvtColor(image[int(1380 * height / 1440):int(1428 * height / 1440),
-                int(78 * width / 2560):int(153 * width / 2560)], cv2.COLOR_BGR2GRAY), ((20, 20), (20, 20)), mode='edge')
-        part2_ac = np.pad(cv2.cvtColor(image[int(1380 * height / 1440):int(1428 * height / 1440),
-                int(354 * width / 2560):int(429 * width / 2560)], cv2.COLOR_BGR2GRAY), ((20, 20), (20, 20)), mode='edge')
+        
+        # part2_hp = cv2.cvtColor(image[int(1399 * height / 1440):int(1413 * height / 1440),int(166 * width / 2560):int(273 * width / 2560)], cv2.COLOR_BGR2GRAY)
+        # part2_hp = cv2.inRange(part2_hp, 80, 160)
+        # part2_hp = cv2.bitwise_not(part2_hp)
+        # hp = int(np.round((100*np.count_nonzero(part2_hp[0] == 255)/107))/(width / 2560))
+        # part2_ac = cv2.cvtColor(image[int(1399 * height / 1440):int(1413 * height / 1440),int(442 * width / 2560):int(549 * width / 2560)], cv2.COLOR_BGR2GRAY)
+        # part2_ac = cv2.inRange(part2_ac, 80, 160)
+        # part2_ac = cv2.bitwise_not(part2_ac)
+        # ac = int(np.round((100*np.count_nonzero(part2_ac[0] == 255)/107))/(width / 2560))
+        # data_dict[str(ctime)]['hp_ac'] = [hp, ac]
+        # hp_ac.append([ctime, hp, ac])
 
+        # if hp > last_hp:
+        #     hp = last_hp
+        # last_hp = hp
 
-        part2_hp = cv2.adaptiveThreshold(part2_hp, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 3, 7)
-        part2_ac = cv2.adaptiveThreshold(part2_ac, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 3, 7)
+        # if ac > last_ac:
+        #     ac = last_ac
+        # last_ac = ac
 
+        # part2_hp = np.pad(cv2.cvtColor(image[int(1380 * height / 1440):int(1428 * height / 1440),
+        #         int(78 * width / 2560):int(153 * width / 2560)], cv2.COLOR_BGR2GRAY), ((20, 20), (20, 20)), mode='edge')
+        # part2_ac = np.pad(cv2.cvtColor(image[int(1380 * height / 1440):int(1428 * height / 1440),
+        #         int(354 * width / 2560):int(429 * width / 2560)], cv2.COLOR_BGR2GRAY), ((20, 20), (20, 20)), mode='edge')
         # part2_concate = np.concatenate((part2_hp, part2_ac), axis=0)
-        # ret, part2_hp = cv2.threshold(part2_hp, 200, 255, cv2.THRESH_BINARY)
-        # ret, part2_ac = cv2.threshold(part2_ac, 200, 255, cv2.THRESH_BINARY)
 
-        name = 'result/' + str(ctime) + 'part2.png'
-        cv2.imwrite(name, part2_hp)
-
+        part2_hp = image[int(1380 * height / 1440):int(1428 * height / 1440), int(78 * width / 2560):int(153 * width / 2560)]
+        part2_ac = image[int(1380 * height / 1440):int(1428 * height / 1440), int(354 * width / 2560):int(429 * width / 2560)]
+        part2_concate = np.concatenate((part2_hp, part2_ac), axis=0)
+        
         results_hp = reader.readtext(part2_hp, allowlist='0123456789',
                                 paragraph=True)
         results_ac = reader.readtext(part2_ac, allowlist='0123456789',
                                 paragraph=True)
         
+
+        part2_hp = cv2.inRange(part2_hp, 80, 160)
+        part2_hp = cv2.bitwise_not(part2_hp)
+        hp = int(np.round((100*np.count_nonzero(part2_hp[0] == 255)/107))/(width / 2560))
+        part2_ac = cv2.cvtColor(image[int(1399 * height / 1440):int(1413 * height / 1440),int(442 * width / 2560):int(549 * width / 2560)], cv2.COLOR_BGR2GRAY)
+        part2_ac = cv2.inRange(part2_ac, 80, 160)
+        part2_ac = cv2.bitwise_not(part2_ac)
+        ac = int(np.round((100*np.count_nonzero(part2_ac[0] == 255)/107))/(width / 2560))
+
+        # name = 'result/' + str(ctime) + 'part2.png'
+        # cv2.imwrite(name, part2_hp)
+        
+        integer_list = []
         if not results_ac or not results_hp:
             pass
         else:
+
             hp_ac.append([ctime, results_hp[0][1], results_ac[0][1]])
             data_dict[str(ctime)]['hp_ac'] = [results_hp[0][1], results_ac[0][1]]
-        # print(' '.join([result[1] for result in results]))
+
 
         part3_money = image[int(470 * height / 1440):int(530 * height / 1440),
                     int(60 * width / 2560):int(190 * width / 2560)]
@@ -229,7 +265,8 @@ def process_frame(frame_queue):
         # Exit if ESC key is pressed
         # if cv2.waitKey(20) & 0xFF == 27:
         # break
-
+    end = time.time()
+    print(end-sta)
     np.save('hp_record.npy', np.array(hp_ac))
     # print(updated_killers)
     # print(updated_killees)
