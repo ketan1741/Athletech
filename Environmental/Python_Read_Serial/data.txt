@@ -1,0 +1,18 @@
+BME280 test
+-- Default Test --
+
+Temperature = 24.74 *C
+Pressure = 984.47 hPa
+Approx. Altitude = 242.43 m
+Humidity = 54.02 %
+
+Temperature = 24.75 *C
+Pressure = 984.47 hPa
+Approx. Altitude = 242.38 m
+Humidity = 53.97 %
+
+Temperature = 24.75 *C
+Pressure = 984.47 hPa
+Approx. Altitude = 242.46 m
+Humidity = 54.03 %
+
