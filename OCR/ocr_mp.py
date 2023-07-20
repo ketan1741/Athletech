@@ -90,41 +90,46 @@ def process_frame(frame_queue):
                                     axis=0)  # vertical
         # part1_concate = cv2.cvtColor(part1_concate, cv2.COLOR_BGR2GRAY)
         # ret, part1_concate = cv2.threshold(part1_concate, 200, 255, cv2.THRESH_BINARY)
-        name = 'result/' + str(ctime) + 'part1.png'
-        cv2.imwrite(name, part1_concate)
+        # name = 'result/' + str(ctime) + 'part1.png'
+        # cv2.imwrite(name, part1_concate)
 
         results = reader.readtext(part1_concate, allowlist='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-',
                                 paragraph=True, batch_size=8)
         
         data_dict[str(ctime)] = {}
         weapon_name = ' '.join([result[1] for result in results])
-        data_dict[str(ctime)]['weapon o'] = weapon_name
-        distances = [Levenshtein.distance(weapon_name, target) for target in weapon_list]
-        min_distance_index = distances.index(min(distances))
-        weapon_name = weapon_list[min_distance_index]
+
+        if weapon_name != "":
+            data_dict[str(ctime)]['weapon o'] = weapon_name
+            distances = [Levenshtein.distance(weapon_name, target) for target in weapon_list]
+            min_distance_index = distances.index(min(distances))
+            weapon_name = weapon_list[min_distance_index]
         # print(weapon_name)
 
-        data_dict[str(ctime)]['weapon'] = weapon_name
+            data_dict[str(ctime)]['weapon'] = weapon_name
+        
+        else:
+            data_dict[str(ctime)]['weapon'] = ""
         # HP and AC
         
-        # part2_hp = cv2.cvtColor(image[int(1399 * height / 1440):int(1413 * height / 1440),int(166 * width / 2560):int(273 * width / 2560)], cv2.COLOR_BGR2GRAY)
-        # part2_hp = cv2.inRange(part2_hp, 80, 160)
-        # part2_hp = cv2.bitwise_not(part2_hp)
-        # hp = int(np.round((100*np.count_nonzero(part2_hp[0] == 255)/107))/(width / 2560))
-        # part2_ac = cv2.cvtColor(image[int(1399 * height / 1440):int(1413 * height / 1440),int(442 * width / 2560):int(549 * width / 2560)], cv2.COLOR_BGR2GRAY)
-        # part2_ac = cv2.inRange(part2_ac, 80, 160)
-        # part2_ac = cv2.bitwise_not(part2_ac)
-        # ac = int(np.round((100*np.count_nonzero(part2_ac[0] == 255)/107))/(width / 2560))
-        # data_dict[str(ctime)]['hp_ac'] = [hp, ac]
-        # hp_ac.append([ctime, hp, ac])
-
-        # if hp > last_hp:
-        #     hp = last_hp
-        # last_hp = hp
-
-        # if ac > last_ac:
-        #     ac = last_ac
-        # last_ac = ac
+        part2_hp = cv2.cvtColor(image[int(1399 * height / 1440):int(1413 * height / 1440),int(166 * width / 2560):int(273 * width / 2560)], cv2.COLOR_BGR2GRAY)
+        part2_hp = cv2.inRange(part2_hp, 80, 160)
+        part2_hp = cv2.bitwise_not(part2_hp)
+        hp = int(np.round((100*np.count_nonzero(part2_hp[0] == 255)/107))/(width / 2560))
+        if hp > last_hp:
+            hp = last_hp
+        else:
+            last_hp = hp
+        part2_ac = cv2.cvtColor(image[int(1399 * height / 1440):int(1413 * height / 1440),int(442 * width / 2560):int(549 * width / 2560)], cv2.COLOR_BGR2GRAY)
+        part2_ac = cv2.inRange(part2_ac, 80, 160)
+        part2_ac = cv2.bitwise_not(part2_ac)
+        ac = int(np.round((100*np.count_nonzero(part2_ac[0] == 255)/107))/(width / 2560))
+        if ac > last_ac:
+            ac = last_ac
+        else:
+            last_ac = ac
+        data_dict[str(ctime)]['hp_ac'] = [hp, ac]
+        hp_ac.append([ctime, hp, ac])
 
         # part2_hp = np.pad(cv2.cvtColor(image[int(1380 * height / 1440):int(1428 * height / 1440),
         #         int(78 * width / 2560):int(153 * width / 2560)], cv2.COLOR_BGR2GRAY), ((20, 20), (20, 20)), mode='edge')
@@ -132,34 +137,33 @@ def process_frame(frame_queue):
         #         int(354 * width / 2560):int(429 * width / 2560)], cv2.COLOR_BGR2GRAY), ((20, 20), (20, 20)), mode='edge')
         # part2_concate = np.concatenate((part2_hp, part2_ac), axis=0)
 
-        part2_hp = image[int(1380 * height / 1440):int(1428 * height / 1440), int(78 * width / 2560):int(153 * width / 2560)]
-        part2_ac = image[int(1380 * height / 1440):int(1428 * height / 1440), int(354 * width / 2560):int(429 * width / 2560)]
-        part2_concate = np.concatenate((part2_hp, part2_ac), axis=0)
+        # part2_hp = image[int(1380 * height / 1440):int(1428 * height / 1440), int(78 * width / 2560):int(153 * width / 2560)]
+        # part2_ac = image[int(1380 * height / 1440):int(1428 * height / 1440), int(354 * width / 2560):int(429 * width / 2560)]
+        # part2_concate = np.concatenate((part2_hp, part2_ac), axis=0)
         
-        results_hp = reader.readtext(part2_hp, allowlist='0123456789',
-                                paragraph=True)
-        results_ac = reader.readtext(part2_ac, allowlist='0123456789',
-                                paragraph=True)
+        # results_hp = reader.readtext(part2_hp, allowlist='0123456789',
+        #                         paragraph=True)
+        # results_ac = reader.readtext(part2_ac, allowlist='0123456789',
+        #                         paragraph=True)
         
 
-        part2_hp = cv2.inRange(part2_hp, 80, 160)
-        part2_hp = cv2.bitwise_not(part2_hp)
-        hp = int(np.round((100*np.count_nonzero(part2_hp[0] == 255)/107))/(width / 2560))
-        part2_ac = cv2.cvtColor(image[int(1399 * height / 1440):int(1413 * height / 1440),int(442 * width / 2560):int(549 * width / 2560)], cv2.COLOR_BGR2GRAY)
-        part2_ac = cv2.inRange(part2_ac, 80, 160)
-        part2_ac = cv2.bitwise_not(part2_ac)
-        ac = int(np.round((100*np.count_nonzero(part2_ac[0] == 255)/107))/(width / 2560))
+        # part2_hp = cv2.inRange(part2_hp, 80, 160)
+        # part2_hp = cv2.bitwise_not(part2_hp)
+        # hp = int(np.round((100*np.count_nonzero(part2_hp[0] == 255)/107))/(width / 2560))
+        # part2_ac = cv2.cvtColor(image[int(1399 * height / 1440):int(1413 * height / 1440),int(442 * width / 2560):int(549 * width / 2560)], cv2.COLOR_BGR2GRAY)
+        # part2_ac = cv2.inRange(part2_ac, 80, 160)
+        # part2_ac = cv2.bitwise_not(part2_ac)
+        # ac = int(np.round((100*np.count_nonzero(part2_ac[0] == 255)/107))/(width / 2560))
 
-        # name = 'result/' + str(ctime) + 'part2.png'
-        # cv2.imwrite(name, part2_hp)
+        # # name = 'result/' + str(ctime) + 'part2.png'
+        # # cv2.imwrite(name, part2_hp)
         
-        integer_list = []
-        if not results_ac or not results_hp:
-            pass
-        else:
-
-            hp_ac.append([ctime, results_hp[0][1], results_ac[0][1]])
-            data_dict[str(ctime)]['hp_ac'] = [results_hp[0][1], results_ac[0][1]]
+        # integer_list = []
+        # if not results_ac or not results_hp:
+        #     pass
+        # else:
+        #     hp_ac.append([ctime, results_hp[0][1], results_ac[0][1]])
+        #     data_dict[str(ctime)]['hp_ac'] = [results_hp[0][1], results_ac[0][1]]
 
 
         part3_money = image[int(470 * height / 1440):int(530 * height / 1440),
@@ -181,7 +185,8 @@ def process_frame(frame_queue):
         
         magaz = ' '.join([result[1] for result in results])
         data_dict[str(ctime)]['magaz'] = magaz
-
+        name = 'result/' + str(ctime) + 'part4.png'
+        cv2.imwrite(name, part4_magaz)
         # print(' '.join([result[1] for result in results]))
 
         part5_kill1 = image[int(100 * height / 1440):int(143 * height / 1440),
@@ -202,62 +207,108 @@ def process_frame(frame_queue):
         killees = []
         previous = 0
 
-        cv2.imwrite("part1.png", part1_concate)
-        cv2.imwrite("part2.png", part2_hp)
-        cv2.imwrite("part3.png", part3_money)
-        cv2.imwrite("part4.png", part4_magaz)
-        cv2.imwrite("part5.png", part5_concate)
-        cv2.imwrite("image.png", image)
+        # cv2.imwrite("part1.png", part1_concate)
+        # cv2.imwrite("part2.png", part2_hp)
+        # cv2.imwrite("part3.png", part3_money)
+        # cv2.imwrite("part4.png", part4_magaz)
+        # cv2.imwrite("part5.png", part5_concate)
+        # cv2.imwrite("image.png", image)
         
-        results = reader.readtext(part5_concate, allowlist='+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ', paragraph=True, batch_size=16)
+        results = reader.readtext(part5_concate, allowlist='+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ', batch_size=16)
         # text = ' '.join([result[1] for result in results])
 
 
         i = 0
         for result in results:
             if i % 2 == 0:
+                if len(result[1]) <= 2:
+                    i = i - 1
+                    continue
                 killers.append(result[1])
             if i % 2 == 1:
+                if len(result[1]) <= 2:
+                    i = i - 1
+                    continue
                 killees.append(result[1])
             i = i + 1
 
 
+        
+        # for j in range(len(killers)):
+        #     split_killers = killers[j].split()
+
+        #     closest_string_killer = ''
+        #     closest_string_killee = ''
+        #     count = 0
+
+            
+        #     for split_killer in split_killers:
+        #         if split_killer.lower() == 'bot':
+        #             count = count + 1
+        #             continue
+        #         distances = [Levenshtein.distance(split_killer, target) for target in list]
+        #         min_distance_index = distances.index(min(distances))
+        #         closest_string_killer = list[min_distance_index]
+
+        #         if count >= 2:
+        #             closest_string_killer += " and "
+        #         closest_string_killer += list[min_distance_index]
+            
+
+        #     split_killees = killees[j].split()
+        #     for split_killee in split_killees:
+        #         if split_killee.lower() == 'bot':
+        #             continue
+
+        #         distances = [Levenshtein.distance(split_killee, target) for target in list]
+        #         min_distance_index = distances.index(min(distances))
+        #         closest_string_killee = list[min_distance_index]
+
+        #         if "athletechyinzcam" in closest_string_killee or "athletechyinzcam" in closest_string_killer:
+        #             updated_killers.append(closest_string_killer)
+        #             updated_killees.append(closest_string_killee)
+        closest_string_killer = ''
+        closest_string_killee = ''
 
         for killer in killers:
-            split_killers = killer.split()
 
-            closest_string = ''
+            split_killers = killer.split()
             count = 0
+
+            
             for split_killer in split_killers:
                 if split_killer.lower() == 'bot':
                     count = count + 1
                     continue
                 distances = [Levenshtein.distance(split_killer, target) for target in list]
                 min_distance_index = distances.index(min(distances))
+                closest_string_killer = list[min_distance_index]
 
                 if count >= 2:
-                    closest_string += " and "
-                closest_string += list[min_distance_index]
-
-
-            updated_killers.append(closest_string)
-
+                    closest_string_killer += " and "
+                closest_string_killer += list[min_distance_index]
+            
 
         for killee in killees:
             split_killees = killee.split()
             for split_killee in split_killees:
                 if split_killee.lower() == 'bot':
                     continue
+
                 distances = [Levenshtein.distance(split_killee, target) for target in list]
                 min_distance_index = distances.index(min(distances))
-                closest_string = list[min_distance_index]
-                updated_killees.append(closest_string)
+                closest_string_killee = list[min_distance_index]
 
-        kill_list = []
+        if "athletechyinzcam" in closest_string_killee or "athletechyinzcam" in closest_string_killer:
+            updated_killers.append(closest_string_killer)
+            updated_killees.append(closest_string_killee)
 
-        for i in range(len(killees)):
-            kill_list.append({killers[i]:killees[i]})
-        data_dict[str(ctime)]['kill_info'] = kill_list
+
+    kill_list = []
+
+    for i in range(len(updated_killees)):
+        kill_list.append({updated_killers[i]:updated_killees[i]})
+    data_dict[str(ctime)]['kill_info'] = kill_list
 
 
         # print("\n\n********Next Image")
