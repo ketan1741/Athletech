@@ -1,0 +1,23 @@
+2023-07-27 14:18:28.462486
+BME280 test
+-- Default Test --
+
+Temperature = 24.40 *C
+Pressure = 983.07 hPa
+Approx. Altitude = 254.36 m
+Humidity = 38.59 %
+
+Temperature = 24.41 *C
+Pressure = 983.07 hPa
+Approx. Altitude = 254.40 m
+Humidity = 38.65 %
+
+Temperature = 24.40 *C
+Pressure = 983.07 hPa
+Approx. Altitude = 254.35 m
+Humidity = 38.79 %
+
+Temperature = 24.40 *C
+Pressure = 983.06 hPa
+Approx. Altitude = 254.46 m
+Humidity = 38.89 %
