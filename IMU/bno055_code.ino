@@ -156,9 +156,9 @@ void setup(void)
 
   // Serial.println("Connected to MQTT broker!");
 
-  Serial.println();
-  Serial.println("Wearable IMU System");
-  Serial.println();
+  // Serial.println();
+  // Serial.println("Wearable IMU System");
+  // Serial.println();
 
   Wire.begin();
 
@@ -280,7 +280,7 @@ void setup(void)
     EEPROM.get(3*(sizeof(long) + sizeof(adafruit_bno055_offsets_t)) + sizeof(long), cal_data_l1);
 
     //Display stored value
-    displaySensorOffsets(cal_data_l1);
+    // displaySensorOffsets(cal_data_l1);
 
     //Set calibration data to sensor
     // Serial.println("Setting l1...");
@@ -307,7 +307,7 @@ void setup(void)
     EEPROM.get(sizeof(long), cal_data_r1);
 
     //Display stored value
-    displaySensorOffsets(cal_data_r1);
+    // displaySensorOffsets(cal_data_r1);
 
     //Set calibration data to sensor
     // Serial.println("Setting r1...");
@@ -327,17 +327,17 @@ void setup(void)
     delay(500);
   }
   else {
-    Serial.println("l2 data found!");
+    // Serial.println("l2 data found!");
 
     //Offset from start of EEPROM to find sensor l2 calibration
     adafruit_bno055_offsets_t cal_data_l2;
     EEPROM.get(4*(sizeof(long) + sizeof(adafruit_bno055_offsets_t)) + sizeof(long), cal_data_l2);
 
     //Display stored value
-    displaySensorOffsets(cal_data_l2);
+    // displaySensorOffsets(cal_data_l2);
 
     //Set calibration data to sensor
-    Serial.println("Setting l2...");
+    // Serial.println("Setting l2...");
     bno_l2.setSensorOffsets(cal_data_l2);
     is_calib_l2 = true;
   }
@@ -354,17 +354,17 @@ void setup(void)
     delay(500);
   }
   else {
-    Serial.println("r2 data found!");
+    // Serial.println("r2 data found!");
 
     //Offset from start of EEPROM to find sensor r2 calibration
     adafruit_bno055_offsets_t cal_data_r2;
     EEPROM.get(2*sizeof(long) + sizeof(adafruit_bno055_offsets_t), cal_data_r2);
 
     //Display stored value
-    displaySensorOffsets(cal_data_r2);
+    // displaySensorOffsets(cal_data_r2);
 
     //Set calibration data to sensor
-    Serial.println("Setting r2...");
+    // Serial.println("Setting r2...");
     bno_r2.setSensorOffsets(cal_data_r2);
     is_calib_r2 = true;
   }
@@ -381,17 +381,17 @@ void setup(void)
     delay(500);
   }
   else {
-    Serial.println("l3 data found!");
+    // Serial.println("l3 data found!");
 
     //Offset from start of EEPROM to find sensor l3 calibration
     adafruit_bno055_offsets_t cal_data_l3;
     EEPROM.get(5*(sizeof(long) + sizeof(adafruit_bno055_offsets_t)) + sizeof(long), cal_data_l3);
 
     //Display stored value
-    displaySensorOffsets(cal_data_l3);
+    // displaySensorOffsets(cal_data_l3);
 
     //Set calibration data to sensor
-    Serial.println("Setting l3...");
+    // Serial.println("Setting l3...");
     bno_l3.setSensorOffsets(cal_data_l3);
     is_calib_l3 = true;
   }
@@ -415,7 +415,7 @@ void setup(void)
     EEPROM.get(2*(sizeof(long) + sizeof(adafruit_bno055_offsets_t)) + sizeof(long), cal_data_r3);
 
     //Display stored value
-    displaySensorOffsets(cal_data_r3);
+    // displaySensorOffsets(cal_data_r3);
 
     //Set calibration data to sensor
     // Serial.println("Setting r3...");

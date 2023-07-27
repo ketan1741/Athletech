@@ -18,7 +18,7 @@ r3_a_data = []
 
 with open("IMUdata.txt", 'r') as file:
     data = file.readlines()
-    for i in data:
+    for i in data[1:]:
         temp = i.strip().split(",")
         tempfloat = []
         for i in range (len(temp)):
