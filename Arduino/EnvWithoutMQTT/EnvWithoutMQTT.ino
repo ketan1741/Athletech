@@ -43,7 +43,7 @@ void setup() {
     while (1);
   }
   
-  delayTime = 1000;
+  delayTime = 200;
 
   //Below is BH1750 light sensor part
   Wire.begin();
