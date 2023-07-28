@@ -893,5 +893,5 @@ void loop(void)
   // Serial.println();
 
   // delay(BNO055_SAMPLERATE_DELAY_MS);
-  delay(250);
+  delay(200);
 }
