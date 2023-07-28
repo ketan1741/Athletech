@@ -15,10 +15,11 @@ def stop(key):
 
 with keyboard.Listener(on_press = stop) as listener:
     with open(file_path, 'w') as file:
-        file.write(datetime.now().strftime("%H:%M:%S.%f") + '\n')
+        print("Logging Data!")
         while True:
             data = ser.readline().decode().strip()  # Read a line of data from the serial port and decode it
-            print(data)  # Print the received data
+            #print(data)  # Print the received data
+            file.write(datetime.now().strftime("%H:%M:%S.%f") + ',')
             file.write(data + '\n')  # Write the data to the text file
             if not listener.running:
                 break
