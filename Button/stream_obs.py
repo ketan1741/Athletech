@@ -1,29 +1,37 @@
-import obswebsocket
-from obswebsocket import obsws, requests, events, exceptions
-import time
+import asyncio
+
+from obswsrc import OBSWS
+from obswsrc.requests import ResponseStatus, StartStreamingRequest
+from obswsrc.types import Stream, StreamSettings
 
 
-time.sleep(2)
+# pip install obs-ws-rc
 
-# Replace these with your actual OBS WebSocket server settings
-websocket_host = "localhost"
-websocket_port = 4444
-websocket_password = ""  # Set to empty string if you didn't set a password
+async def main():
 
-# Connect to the OBS Studio WebSocket server
-ws = obswebsocket.obsws(websocket_host, websocket_port, websocket_password)
+    async with OBSWS('localhost', 4444, "password") as obsws:
 
-try:
-    ws.connect()  # Connect to OBS Studio
+        # We can send an empty StartStreaming request (in that case the plugin
+        # will use OBS configuration), but let's provide some settings as well
+        stream_settings = StreamSettings(
+            server="rtmp://example.org/my_application",
+            key="secret_stream_key",
+            use_auth=False
+        )
+        stream = Stream(
+            settings=stream_settings,
+            type="rtmp_custom",
+        )
 
-    # Start the OBS Studio recording (You can change this to other actions, e.g., "StartStreaming")
-    response = ws.call(requests.StartRecording())
+        # Now let's actually perform a request
+        response = await obsws.require(StartStreamingRequest(stream=stream))
 
-    if response.status:
-        print("Recording started successfully.")
-    else:
-        print("Failed to start recording:", response.error)
-except exceptions.ConnectionFailure:
-    print("Failed to connect to OBS Studio WebSocket server.")
-finally:
-    ws.disconnect()  # Disconnect from OBS Studio
+        # Check if everything is OK
+        if response.status == ResponseStatus.OK:
+            print("Streaming has started")
+        else:
+            print("Couldn't start the stream! Reason:", response.error)
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+loop.close()
