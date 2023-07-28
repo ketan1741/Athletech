@@ -1,0 +1,278 @@
+Counter-Strike: Global Offensive
+Map: de_dust2
+Players: 16 (0 bots) / 20 humans
+Build: 8853
+Server Number: 19
+
+07/28/2023 - 15:04:15: SignalXWriteOpportunity(3)
+07/28/2023 - 15:04:15: Got pure server whitelist: sv_pure = 1.
+07/28/2023 - 15:04:17: Error reading file resource/overviews/de_dust2_radar_spectate.dds.
+07/28/2023 - 15:04:18: [#527222247 SDR server steamid:90174776875890707 vport 0] Discarding inactive session iad#148 (162.254.192.69:27024).  session_inactivity_timeout
+07/28/2023 - 15:04:18: athletechyinzcam connected.
+07/28/2023 - 15:04:22: ChangeGameUIState: CSGO_GAME_UI_STATE_LOADINGSCREEN -> CSGO_GAME_UI_STATE_INGAME
+07/28/2023 - 15:04:22: ChangeGameUIState: CSGO_GAME_UI_STATE_INGAME -> CSGO_GAME_UI_STATE_INGAME
+07/28/2023 - 15:04:22: CCSGO_BlurTarget - Unable to find panel with the given id "sliding-panel--TERRORIST"! Panel is possibly created dynamically.
+07/28/2023 - 15:04:22: CCSGO_BlurTarget - Unable to find panel with the given id "sliding-panel--CT"! Panel is possibly created dynamically.
+07/28/2023 - 15:04:22: 0:  Reinitialized 2 predictable entities
+07/28/2023 - 15:04:22: GRANTBGAME connected.
+07/28/2023 - 15:04:22: ChezDude2000 connected.
+07/28/2023 - 15:04:22: NoName connected.
+07/28/2023 - 15:04:22: dark connected.
+07/28/2023 - 15:04:23: DispatchAsyncEvent backlog, failed to dispatch all this frame. 87 of 301 remaining
+07/28/2023 - 15:04:23: DispatchAsyncEvent backlog, failed to dispatch all this frame. 86 of 304 remaining
+07/28/2023 - 15:04:26: 0:  Reinitialized 4 predictable entities
+07/28/2023 - 15:04:29: Resource materials\panorama\images\icons\equipment\world.svg failed to load.
+07/28/2023 - 15:04:30: DispatchAsyncEvent backlog, failed to dispatch all this frame. 80 of 95 remaining
+07/28/2023 - 15:04:32: DispatchAsyncEvent backlog, failed to dispatch all this frame. 79 of 86 remaining
+07/28/2023 - 15:04:43: Ryeguy9280 connected.
+07/28/2023 - 15:04:50: ryan gosling connected.
+07/28/2023 - 15:04:56: Player: athletechyinzcam - Damage Given
+07/28/2023 - 15:04:56: -------------------------
+07/28/2023 - 15:04:56: Damage Given to "peni" - 75 in 3 hits
+07/28/2023 - 15:04:56: Player: athletechyinzcam - Damage Taken
+07/28/2023 - 15:04:56: -------------------------
+07/28/2023 - 15:04:56: Damage Taken from "peni" - 137 in 2 hits
+07/28/2023 - 15:05:06: 0:  Reinitialized 1 predictable entities
+07/28/2023 - 15:05:12: Esvin connected.
+07/28/2023 - 15:05:19: trx7h connected.
+07/28/2023 - 15:05:20: Player: athletechyinzcam - Damage Given
+07/28/2023 - 15:05:20: -------------------------
+07/28/2023 - 15:05:20: Player: athletechyinzcam - Damage Taken
+07/28/2023 - 15:05:20: -------------------------
+07/28/2023 - 15:05:20: Damage Taken from "ClickZero" - 108 in 1 hit
+07/28/2023 - 15:05:23: 0:  Reinitialized 4 predictable entities
+07/28/2023 - 15:05:23: Big Time Rush's #1 Fan connected.
+07/28/2023 - 15:05:24: SteamNetworkingSockets lock held for 5.1ms.  (Performance warning.)  ServiceThread,CSteamNetworkConnectionBase::Think,PostConnectionStateUpdateForDiagnosticsUI
+This is usually a symptom of a general performance problem such as thread starvation.
+07/28/2023 - 15:05:27: DispatchAsyncEvent backlog, failed to dispatch all this frame. 81 of 95 remaining
+07/28/2023 - 15:05:37: DispatchAsyncEvent backlog, failed to dispatch all this frame. 81 of 84 remaining
+07/28/2023 - 15:05:54: DispatchAsyncEvent backlog, failed to dispatch all this frame. 79 of 82 remaining
+07/28/2023 - 15:06:08: Player: athletechyinzcam - Damage Given
+07/28/2023 - 15:06:08: -------------------------
+07/28/2023 - 15:06:08: Damage Given to "Ryeguy9280" - 128 in 2 hits
+07/28/2023 - 15:06:08: Damage Given to "LittyLab" - 20 in 1 hit
+07/28/2023 - 15:06:08: Player: athletechyinzcam - Damage Taken
+07/28/2023 - 15:06:08: -------------------------
+07/28/2023 - 15:06:08: Damage Taken from "Ryeguy9280" - 53 in 2 hits
+07/28/2023 - 15:06:08: Damage Taken from "LittyLab" - 46 in 2 hits
+07/28/2023 - 15:06:08: Damage Taken from "ClickZero" - 21 in 1 hit
+07/28/2023 - 15:06:13: 0:  Reinitialized 1 predictable entities
+07/28/2023 - 15:06:15: 0:  Reinitialized 1 predictable entities
+07/28/2023 - 15:06:30: Certificate expires in 43h26m at 1690727554 (current time 1690571188), will renew in 41h26m
+07/28/2023 - 15:06:30: SteamNetworkingSockets lock held for 12.6ms.  (Performance warning.)  ServiceThread,BeginFetchNetworkConfig,CSteamNetworkConnectionBase::Think,SNP_SendPacket,SendUDPacket
+This is usually a symptom of a general performance problem such as thread starvation.
+07/28/2023 - 15:06:44: *DEAD* LittyLab‎ : mf what
+07/28/2023 - 15:06:49: 0:  Reinitialized 4 predictable entities
+07/28/2023 - 15:06:49: Player: athletechyinzcam - Damage Given
+07/28/2023 - 15:06:49: -------------------------
+07/28/2023 - 15:06:49: Damage Given to "Ryeguy9280" - 128 in 2 hits
+07/28/2023 - 15:06:49: Damage Given to "LittyLab" - 20 in 1 hit
+07/28/2023 - 15:06:49: Player: athletechyinzcam - Damage Taken
+07/28/2023 - 15:06:49: -------------------------
+07/28/2023 - 15:06:49: Damage Taken from "Ryeguy9280" - 53 in 2 hits
+07/28/2023 - 15:06:49: Damage Taken from "LittyLab" - 46 in 2 hits
+07/28/2023 - 15:06:49: Damage Taken from "ClickZero" - 21 in 1 hit
+07/28/2023 - 15:06:52: DispatchAsyncEvent backlog, failed to dispatch all this frame. 80 of 95 remaining
+07/28/2023 - 15:07:21: DispatchAsyncEvent backlog, failed to dispatch all this frame. 80 of 94 remaining
+07/28/2023 - 15:07:28: Waited 2.8ms for SteamNetworkingSockets lock [ServiceThread]
+07/28/2023 - 15:07:54: DispatchAsyncEvent backlog, failed to dispatch all this frame. 79 of 103 remaining
+07/28/2023 - 15:08:04: Player: athletechyinzcam - Damage Given
+07/28/2023 - 15:08:04: -------------------------
+07/28/2023 - 15:08:04: Damage Given to "ClickZero" - 118 in 2 hits
+07/28/2023 - 15:08:04: Damage Given to "peni" - 118 in 2 hits
+07/28/2023 - 15:08:04: Damage Given to "trx7h" - 25 in 1 hit
+07/28/2023 - 15:08:04: Damage Given to "BTRlovers Big Time Rush's #1 Fan" - 89 in 1 hit
+07/28/2023 - 15:08:04: Player: athletechyinzcam - Damage Taken
+07/28/2023 - 15:08:04: -------------------------
+07/28/2023 - 15:08:04: Damage Taken from "ClickZero" - 30 in 2 hits
+07/28/2023 - 15:08:04: Damage Taken from "peni" - 61 in 2 hits
+07/28/2023 - 15:08:35: Player: athletechyinzcam - Damage Given
+07/28/2023 - 15:08:35: -------------------------
+07/28/2023 - 15:08:35: Damage Given to "LittyLab" - 46 in 2 hits
+07/28/2023 - 15:08:35: Damage Given to "BTRlovers Big Time Rush's #1 Fan" - 100 in 4 hits
+07/28/2023 - 15:08:35: Player: athletechyinzcam - Damage Taken
+07/28/2023 - 15:08:35: -------------------------
+07/28/2023 - 15:08:35: Damage Taken from "BigDiddy17" - 22 in 1 hit
+07/28/2023 - 15:08:35: Damage Taken from "BTRlovers Big Time Rush's #1 Fan" - 36 in 1 hit
+07/28/2023 - 15:08:35: Damage Taken from "ClickZero" - 29 in 1 hit
+07/28/2023 - 15:08:35: Damage Taken from "emdrevious" - 19 in 1 hit
+07/28/2023 - 15:08:50: DispatchAsyncEvent backlog, failed to dispatch all this frame. 79 of 89 remaining
+07/28/2023 - 15:08:52: DispatchAsyncEvent backlog, failed to dispatch all this frame. 79 of 91 remaining
+07/28/2023 - 15:09:00: 0:  Reinitialized 4 predictable entities
+07/28/2023 - 15:09:00: Player: athletechyinzcam - Damage Given
+07/28/2023 - 15:09:00: -------------------------
+07/28/2023 - 15:09:00: Damage Given to "LittyLab" - 46 in 2 hits
+07/28/2023 - 15:09:00: Damage Given to "BTRlovers Big Time Rush's #1 Fan" - 100 in 4 hits
+07/28/2023 - 15:09:00: Player: athletechyinzcam - Damage Taken
+07/28/2023 - 15:09:00: -------------------------
+07/28/2023 - 15:09:00: Damage Taken from "BigDiddy17" - 22 in 1 hit
+07/28/2023 - 15:09:00: Damage Taken from "BTRlovers Big Time Rush's #1 Fan" - 36 in 1 hit
+07/28/2023 - 15:09:00: Damage Taken from "ClickZero" - 29 in 1 hit
+07/28/2023 - 15:09:00: Damage Taken from "emdrevious" - 19 in 1 hit
+07/28/2023 - 15:09:02: Resource materials\panorama\images\icons\equipment\world.svg failed to load.
+07/28/2023 - 15:09:17: Magma404.exe connected.
+07/28/2023 - 15:09:35: Player: athletechyinzcam - Damage Given
+07/28/2023 - 15:09:35: -------------------------
+07/28/2023 - 15:09:35: Damage Given to "trx7h" - 108 in 4 hits
+07/28/2023 - 15:09:35: Damage Given to "peni" - 108 in 3 hits
+07/28/2023 - 15:09:35: Damage Given to "BTRlovers Big Time Rush's #1 Fan" - 103 in 2 hits
+07/28/2023 - 15:09:35: Player: athletechyinzcam - Damage Taken
+07/28/2023 - 15:09:35: -------------------------
+07/28/2023 - 15:09:35: Damage Taken from "trx7h" - 27 in 1 hit
+07/28/2023 - 15:09:35: Damage Taken from "ChezDude2000" - 108 in 1 hit
+07/28/2023 - 15:10:06: ChangeGameUIState: CSGO_GAME_UI_STATE_INGAME -> CSGO_GAME_UI_STATE_PAUSEMENU
+07/28/2023 - 15:10:06: Resource materials\panorama\images\icons\ui\globe.svg failed to load.
+07/28/2023 - 15:10:07: ChangeGameUIState: CSGO_GAME_UI_STATE_PAUSEMENU -> CSGO_GAME_UI_STATE_INGAME
+07/28/2023 - 15:10:17: kaylebsmedley6 connected.
+07/28/2023 - 15:10:22: ChangeGameUIState: CSGO_GAME_UI_STATE_INGAME -> CSGO_GAME_UI_STATE_PAUSEMENU
+07/28/2023 - 15:10:22: Resource materials\panorama\images\icons\ui\globe.svg failed to load.
+07/28/2023 - 15:10:22: PNG load error Interlace handling should be turned on when using png_read_image
+07/28/2023 - 15:10:27: **** Unable to localize '#GenericConfirmText_Label' on panel descendant of 'PopupManager'
+07/28/2023 - 15:10:28: Closing Steam Net Connection to =[A:1:1466120211:23931]:0, handle 1f6cc5e7 (1000 Disconnect)
+07/28/2023 - 15:10:28: Disassociating NetChan CLIENT (=[A:1:1466120211:23931]:0) from Steam Net Connection handle 1f6cc5e7
+07/28/2023 - 15:10:28: Summary of connection to #527222247 SDR server steamid:90174776875890707 vport 0:
+07/28/2023 - 15:10:28:     End-to-end connection: connected
+07/28/2023 - 15:10:28:         Remote host is in data center 'iad'
+07/28/2023 - 15:10:28:         Current rates:
+07/28/2023 - 15:10:28:             Sent:  58.9 pkts/sec   7.9 K/sec
+07/28/2023 - 15:10:28:             Recv:  64.1 pkts/sec  45.8 K/sec
+07/28/2023 - 15:10:28:             Ping:10ms    Max latency variance: 42.6ms
+07/28/2023 - 15:10:28:             Quality:  100%  (Dropped:0.00%  WeirdSeq:0.00%)
+07/28/2023 - 15:10:28:             Est avail bandwidth: 1024.0KB/s  
+07/28/2023 - 15:10:28:             Bytes buffered: 0
+07/28/2023 - 15:10:28:         Lifetime stats:
+07/28/2023 - 15:10:28:             Totals
+07/28/2023 - 15:10:28:                 Sent:     31,525 pkts       3,995,709 bytes
+07/28/2023 - 15:10:28:                 Recv:     35,624 pkts      22,088,762 bytes
+07/28/2023 - 15:10:28:                 Recv w seq:     35,623 pkts
+07/28/2023 - 15:10:28:                 Dropped   :          0 pkts   0.00%
+07/28/2023 - 15:10:28:                 OutOfOrder:          0 pkts   0.00%
+07/28/2023 - 15:10:28:                 Duplicate :          0 pkts   0.00%
+07/28/2023 - 15:10:28:                 SeqLurch  :          0 pkts   0.00%
+07/28/2023 - 15:10:28:             Ping histogram: (28843 total samples)
+07/28/2023 - 15:10:28:                      0-25    25-50    50-75   75-100  100-125  125-150  150-200  200-300     300+
+07/28/2023 - 15:10:28:                     28752       69       22        0        0        0        0        0        0
+07/28/2023 - 15:10:28:                     99.7%     0.2%     0.1%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%
+07/28/2023 - 15:10:28:             Ping distribution:
+07/28/2023 - 15:10:28:                 5th   50th   75th   95th   98th
+07/28/2023 - 15:10:28:                 9ms   10ms   10ms   12ms   15ms
+07/28/2023 - 15:10:28:             Connection quality histogram: (109 measurement intervals)
+07/28/2023 - 15:10:28:                 perfect    99+  97-99  95-97  90-95  75-90  50-75    <50   dead
+07/28/2023 - 15:10:28:                     109      0      0      0      0      0      0      0      0
+07/28/2023 - 15:10:28:                  100.0%   0.0%   0.0%   0.0%   0.0%   0.0%   0.0%   0.0%   0.0%
+07/28/2023 - 15:10:28:             Connection quality distribution:
+07/28/2023 - 15:10:28:               50th  25th   5th   2nd
+07/28/2023 - 15:10:28:               100%  100%  100%  100%
+07/28/2023 - 15:10:28:             Latency variance histogram: (35614 total measurements)
+07/28/2023 - 15:10:28:                       <1     1-2     2-5    5-10   10-20     >20
+07/28/2023 - 15:10:28:                    22603    7115    4428    1037     370      61
+07/28/2023 - 15:10:28:                    63.5%   20.0%   12.4%    2.9%    1.0%    0.2%
+07/28/2023 - 15:10:28:         Rate stats received from remote host 12.9s ago:
+07/28/2023 - 15:10:28:             Sent:  64.1 pkts/sec  39.1 K/sec
+07/28/2023 - 15:10:28:             Recv:  52.5 pkts/sec   7.3 K/sec
+07/28/2023 - 15:10:28:             Ping:10ms    Max latency variance: 2.3ms
+07/28/2023 - 15:10:28:             Quality:  100%  (Dropped:0.00%  WeirdSeq:0.00%)
+07/28/2023 - 15:10:28:             Bytes buffered: 0
+07/28/2023 - 15:10:28:         Lifetime stats received from remote host 73.8s ago:
+07/28/2023 - 15:10:28:             Totals
+07/28/2023 - 15:10:28:                 Sent:     30,854 pkts      18,454,528 bytes
+07/28/2023 - 15:10:28:                 Recv:     27,593 pkts       3,798,016 bytes
+07/28/2023 - 15:10:28:                 Recv w seq:     27,592 pkts
+07/28/2023 - 15:10:28:                 Dropped   :          2 pkts   0.01%
+07/28/2023 - 15:10:28:                 OutOfOrder:          0 pkts   0.00%
+07/28/2023 - 15:10:28:                 Duplicate :          0 pkts   0.00%
+07/28/2023 - 15:10:28:                 SeqLurch  :          0 pkts   0.00%
+07/28/2023 - 15:10:28:             Ping histogram: (25805 total samples)
+07/28/2023 - 15:10:28:                      0-25    25-50    50-75   75-100  100-125  125-150  150-200  200-300     300+
+07/28/2023 - 15:10:28:                     25727       63       15        0        0        0        0        0        0
+07/28/2023 - 15:10:28:                     99.7%     0.2%     0.1%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%
+07/28/2023 - 15:10:28:             Ping distribution:
+07/28/2023 - 15:10:28:                 5th   50th   75th   95th   98th
+07/28/2023 - 15:10:28:                 9ms   10ms   10ms   13ms   15ms
+07/28/2023 - 15:10:28:             Connection quality histogram: (93 measurement intervals)
+07/28/2023 - 15:10:28:                 perfect    99+  97-99  95-97  90-95  75-90  50-75    <50   dead
+07/28/2023 - 15:10:28:                      91      2      0      0      0      0      0      0      0
+07/28/2023 - 15:10:28:                   97.8%   2.2%   0.0%   0.0%   0.0%   0.0%   0.0%   0.0%   0.0%
+07/28/2023 - 15:10:28:             Connection quality distribution:
+07/28/2023 - 15:10:28:               50th  25th   5th   2nd
+07/28/2023 - 15:10:28:               100%  100%  100%   99%
+07/28/2023 - 15:10:28:             Latency variance histogram: (27579 total measurements)
+07/28/2023 - 15:10:28:                       <1     1-2     2-5    5-10   10-20     >20
+07/28/2023 - 15:10:28:                    24545    2040     542     123     251      78
+07/28/2023 - 15:10:28:                    89.0%    7.4%    2.0%    0.4%    0.9%    0.3%
+07/28/2023 - 15:10:28:     Primary router: iad#235 (162.254.192.72:27019)  Ping = 9+0=9 (front+back=total)
+07/28/2023 - 15:10:28:         Current rates:
+07/28/2023 - 15:10:28:             Sent:  58.9 pkts/sec   8.5 K/sec
+07/28/2023 - 15:10:28:             Recv:  64.0 pkts/sec  45.7 K/sec
+07/28/2023 - 15:10:28:             Ping:9ms    Max latency variance: 42.6ms
+07/28/2023 - 15:10:28:             Quality:  100%  (Dropped:0.00%  WeirdSeq:0.00%)
+07/28/2023 - 15:10:28:             Bytes buffered: 0
+07/28/2023 - 15:10:28:         Lifetime stats:
+07/28/2023 - 15:10:28:             Totals
+07/28/2023 - 15:10:28:                 Sent:     26,461 pkts       3,547,425 bytes
+07/28/2023 - 15:10:28:                 Recv:     28,744 pkts      18,230,131 bytes
+07/28/2023 - 15:10:28:                 Recv w seq:     28,744 pkts
+07/28/2023 - 15:10:28:                 Dropped   :          0 pkts   0.00%
+07/28/2023 - 15:10:28:                 OutOfOrder:          0 pkts   0.00%
+07/28/2023 - 15:10:28:                 Duplicate :          0 pkts   0.00%
+07/28/2023 - 15:10:28:                 SeqLurch  :          0 pkts   0.00%
+07/28/2023 - 15:10:28:             Ping histogram: (92 total samples)
+07/28/2023 - 15:10:28:                      0-25    25-50    50-75   75-100  100-125  125-150  150-200  200-300     300+
+07/28/2023 - 15:10:28:                        92        0        0        0        0        0        0        0        0
+07/28/2023 - 15:10:28:                    100.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%
+07/28/2023 - 15:10:28:             Ping distribution:
+07/28/2023 - 15:10:28:                 5th   50th   75th   95th   98th
+07/28/2023 - 15:10:28:                 9ms    9ms   10ms   12ms   12ms
+07/28/2023 - 15:10:28:             Connection quality histogram: (80 measurement intervals)
+07/28/2023 - 15:10:28:                 perfect    99+  97-99  95-97  90-95  75-90  50-75    <50   dead
+07/28/2023 - 15:10:28:                      80      0      0      0      0      0      0      0      0
+07/28/2023 - 15:10:28:                  100.0%   0.0%   0.0%   0.0%   0.0%   0.0%   0.0%   0.0%   0.0%
+07/28/2023 - 15:10:28:             Connection quality distribution:
+07/28/2023 - 15:10:28:               50th  25th   5th   2nd
+07/28/2023 - 15:10:28:               100%  100%  100%  100%
+07/28/2023 - 15:10:28:             Latency variance histogram: (28738 total measurements)
+07/28/2023 - 15:10:28:                       <1     1-2     2-5    5-10   10-20     >20
+07/28/2023 - 15:10:28:                    17993    5861    3681     826     319      58
+07/28/2023 - 15:10:28:                    62.6%   20.4%   12.8%    2.9%    1.1%    0.2%
+07/28/2023 - 15:10:28:         Rate stats received from remote host 0.2s ago:
+07/28/2023 - 15:10:28:             Sent:  63.9 pkts/sec  45.5 K/sec
+07/28/2023 - 15:10:28:             Recv:  58.8 pkts/sec   8.5 K/sec
+07/28/2023 - 15:10:28:             Ping:9ms    Max latency variance: 18.8ms
+07/28/2023 - 15:10:28:             Quality:  100%  (Dropped:0.00%  WeirdSeq:0.00%)
+07/28/2023 - 15:10:28:             Bytes buffered: 0
+07/28/2023 - 15:10:28:         Lifetime stats received from remote host 80.7s ago:
+07/28/2023 - 15:10:28:             Totals
+07/28/2023 - 15:10:28:                 Sent:     23,527 pkts      14,759,936 bytes
+07/28/2023 - 15:10:28:                 Recv:     22,084 pkts       2,938,880 bytes
+07/28/2023 - 15:10:28:                 Recv w seq:     22,082 pkts
+07/28/2023 - 15:10:28:                 Dropped   :          2 pkts   0.01%
+07/28/2023 - 15:10:28:                 OutOfOrder:          0 pkts   0.00%
+07/28/2023 - 15:10:28:                 Duplicate :          0 pkts   0.00%
+07/28/2023 - 15:10:28:                 SeqLurch  :          0 pkts   0.00%
+07/28/2023 - 15:10:28:             Ping histogram: (74 total samples)
+07/28/2023 - 15:10:28:                      0-25    25-50    50-75   75-100  100-125  125-150  150-200  200-300     300+
+07/28/2023 - 15:10:28:                        73        1        0        0        0        0        0        0        0
+07/28/2023 - 15:10:28:                     98.6%     1.4%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%
+07/28/2023 - 15:10:28:             Ping distribution:
+07/28/2023 - 15:10:28:                 5th   50th   75th   95th   98th
+07/28/2023 - 15:10:28:                 8ms   10ms   10ms   13ms   22ms
+07/28/2023 - 15:10:28:             Connection quality histogram: (71 measurement intervals)
+07/28/2023 - 15:10:28:                 perfect    99+  97-99  95-97  90-95  75-90  50-75    <50   dead
+07/28/2023 - 15:10:28:                      69      2      0      0      0      0      0      0      0
+07/28/2023 - 15:10:28:                   97.2%   2.8%   0.0%   0.0%   0.0%   0.0%   0.0%   0.0%   0.0%
+07/28/2023 - 15:10:28:             Connection quality distribution:
+07/28/2023 - 15:10:28:               50th  25th   5th   2nd
+07/28/2023 - 15:10:28:               100%  100%  100%   99%
+07/28/2023 - 15:10:28:             Latency variance histogram: (22075 total measurements)
+07/28/2023 - 15:10:28:                       <1     1-2     2-5    5-10   10-20     >20
+07/28/2023 - 15:10:28:                    19736    1565     387      94     220      73
+07/28/2023 - 15:10:28:                    89.4%    7.1%    1.8%    0.4%    1.0%    0.3%
+07/28/2023 - 15:10:28:     Backup router: ord#18 (162.254.193.71:27032)  Ping = 12+18=30 (front+back=total)
+07/28/2023 - 15:10:28:     
+07/28/2023 - 15:10:28: [#527222247 SDR server steamid:90174776875890707 vport 0] closed by app, linger requested but not needed (1000) Disconnect
+07/28/2023 - 15:10:28: Removing Steam Net Connection for =[A:1:1466120211:23931]:0, handle 1f6cc5e7
+07/28/2023 - 15:10:28: ChangeGameUIState: CSGO_GAME_UI_STATE_PAUSEMENU -> CSGO_GAME_UI_STATE_MAINMENU
+07/28/2023 - 15:10:28: ChangeGameUIState: CSGO_GAME_UI_STATE_MAINMENU -> CSGO_GAME_UI_STATE_MAINMENU
+07/28/2023 - 15:10:33: [#527222247 SDR server steamid:90174776875890707 vport 0] Discarding inactive session ord#18 (162.254.193.71:27032).  ConnectionShutdown
+07/28/2023 - 15:10:33: [#527222247 SDR server steamid:90174776875890707 vport 0] Discarding inactive session iad#235 (162.254.192.72:27019).  ConnectionShutdown
+07/28/2023 - 15:10:47: DispatchAsyncEvent backlog, failed to dispatch all this frame. 54 of 88 remaining
