@@ -314,6 +314,7 @@ def process_frame(frame_queue, result_queue):
                         if split_killer.lower() == 'bot':
                             continue
 
+                        # Try 3 or 4 tomorrow
                         if len(split_killer) <= 2:
                             continue
                         distances = [Levenshtein.distance(split_killer, target) for target in list]
