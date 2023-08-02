@@ -399,7 +399,6 @@ if __name__ == '__main__':
         p2.terminate()
     except KeyboardInterrupt:
         p1.join()
-        # p2.terminate()
         p2.join()
         p1.terminate()
         p2.terminate()
