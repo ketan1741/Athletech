@@ -17,7 +17,7 @@ import numpy as np
 from datetime import datetime
 import cv2
 import json
-name_list = ['BOT Dennis', 'BOT Bill', 'Bot Martin', 'BOT Colin', 'BOT Keith', 'BOT Elliot', 'athletechyinzcam']
+name_list = ["athletechyinzcam", "Albert", "Allen", "Bert", "Bob", "Cecil", "Clarence", "Elliot", "Elmer", "Ernie", "Eugene", "Fergus", "Ferris", "Frank", "Frasier", "Fred", "George", "Graham", "Harvey", "Irwin", "Larry", "Lester", "Marvin", "Neil", "Niles", "Oliver", "Opie", "Ryan", "Toby", "Ulric", "Ulysses", "Uri", "Waldo", "Wally", "Walt", "Wesley", "Yanni", "Yogi", "Yuri", "Alfred", "Bill", "Brandon", "Calvin", "Dean", "Dustin", "Ethan", "Harold", "Henry", "Irving", "Jason", "Jenssen", "Josh", "Martin", "Nick", "Norm", "Orin", "Pat", "Perry", "Ron", "Shawn", "Tim", "Will", "Wyatt", "Adam", "Andy", "Chris", "Colin", "Dennis", "Doug", "Duffy", "Gary", "Grant", "Greg", "Ian", "Jerry", "Jon", "Keith", "Mark", "Matt", "Mike", "Nate", "Paul", "Scott", "Steve", "Tom", "Yahn", "Adrian", "Bank", "Brad", "Connor", "Dave", "Dan", "Derek", "Don", "Eric", "Erik", "Finn", "Jeff", "Kevin", "Reed", "Rick", "Ted", "Troy", "Wade", "Wayne", "Xander", "Xavier", "Brian", "Chad", "Chet", "Gabe", "Hank", "Ivan", "Jim", "Joe", "John", "Tony", "Tyler", "Victor", "Vladimir", "Zane", "Zim", "Cory", "Quinn", "Seth", "Vinny", "Arnold", "Brett", "Kurt", "Kyle", "Moe", "Quade", "Quintin", "Ringo", "Rip", "Zach", "Cliffe", "Crusher", "Gunner", "Minh", "Garret", "Phoenix", "Ridgway", "Rock", "Shark", "Steel", "Stone", "Wolf", "Vitaliy", "Zed" ]
 weapon_list = ['AWP', 'G3SG1', 'Galil AR', 'M4A4', 'M4A1-S', 'SCAR-20', 'SG 553', 'SSG 08', '	FAMAS',
                'AUG', 'AK-47', 'USP-S', 'Tec-9', 'Glock-18', 'Desert Eagle', 'P250', 'Dual Berettas', 'XM1014',
                'Sawed-Off', 'M249', 'Negev', 'Riot Shield', 'Nova', 'MAC-10', 'MP7', 'UMP-45', 'P90', 'PP-Bizon',
@@ -28,15 +28,27 @@ winner_list = ['TerroristsWin', 'Counter-TerroristsWin']
 # average ocr processing time: 0.1 sec    
 from collections import Counter
 
-def moving_mode_filter(window_size):
-    values = deque([100 for _ in range(window_size)],maxlen=window_size)
+def multimode(window):
+    counter = Counter(window)
+    max_count = max(counter.values())
+    return [item_s for item_s, counte in counter.items() if counte == max_count]
 
-    def filter(new_value):
-        values.append(new_value)
-        return statistics.mode(values)
 
-    return filter
+def moving_mode_filter(data, window):
+    old_item = window.popleft()
+    window.append(data)
+    modes = multimode(window=list(window))
+    modes.sort()
+    return modes[0], window
     
+
+def remove_uniform_colors(image, background, threshold=20):
+    diff = np.ptp(image, axis=-1)  
+    mask = diff < threshold  
+    image[mask] = background  
+    return image
+
+
 
 def read_frames(frame_queue, index):
     # this function will read frames from the video
@@ -56,7 +68,7 @@ def read_frames(frame_queue, index):
         # put the frame into the queue to be processed
         frame_queue.put(image)
         index += 1
-        if index == 10000:
+        if index == 5000:
             end = time.time()
             dat = datetime.fromtimestamp(end)
             frame_queue.put(None)  # signal that we are done reading frames
@@ -73,13 +85,12 @@ def process_frame(frame_queue):
     data_dict = {}
     sta = time.time()
     dat = datetime.fromtimestamp(sta)
-    hp_filter = moving_mode_filter(10)
-    ac_filter = moving_mode_filter(10)
     reader = easyocr.Reader(['en'], gpu=True)
     
     print('start processing:{}'.format(dat.strftime('%Y-%m-%d-%H-%M-%S-') + f'{dat.microsecond // 1000:03}'))
     # --------------------------------------------------------Player Status--------------------------------------------------------#
     player_alive = True # Live -> 1  Death -> 0
+    window_size = 8
     killer_flg = 0
     killee_flg = 0
     last_hp = 100
@@ -91,7 +102,8 @@ def process_frame(frame_queue):
     old_round = True
     global_kill_dict = []
     min_distance_index_name = -1
-    team_score = [cs_score, ss_score]
+    hp_window = deque([100 for _ in range(window_size)], maxlen=window_size)
+    ac_window = deque([100 for _ in range(window_size)], maxlen=window_size)
     # --------------------------------------------------------Player Status--------------------------------------------------------#
     while True:
         # -------------------------------------------------------image load--------------------------------------------------------#
@@ -140,12 +152,17 @@ def process_frame(frame_queue):
                     old_round = True
                     player_alive = True
                     data_dict[str(ctime)]['score'] = [cs_score, ss_score]
+                    hp_window = deque([100 for _ in range(window_size)], maxlen=window_size)
+                    ac_window = deque([100 for _ in range(window_size)], maxlen=window_size)
 
                 elif min_distance_index_name > 0:
                     cs_score = cs_score + 1
                     old_round = True 
                     player_alive = True
                     data_dict[str(ctime)]['score'] = [cs_score, ss_score]
+                    hp_window = deque([100 for _ in range(window_size)], maxlen=window_size)
+                    ac_window = deque([100 for _ in range(window_size)], maxlen=window_size)
+
                 index_tr = 0
             else:
                 data_dict[str(ctime)]['score'] = [cs_score, ss_score]
@@ -160,7 +177,7 @@ def process_frame(frame_queue):
             # print('At time: {}, player is alive'.format(ctime))
         # ----------------------------------------------------------weapon---------------------------------------------------------#
     
-            part1_weap1 = image[int(906 * height / 1440):int(925 * height / 1440),
+            part1_weap1 = image[int(906 * height / 1440) : int(925 * height / 1440),
                         int(2100 * width / 2560):int(2530 * width / 2560)]  # top
             part1_weap2 = image[int(1012 * height / 1440):int(1042 * height / 1440),
                         int(2100 * width / 2560):int(2530 * width / 2560)]
@@ -197,24 +214,33 @@ def process_frame(frame_queue):
         # ----------------------------------------------------------weapon---------------------------------------------------------#
 
         # --------------------------------------------------------HP and AC--------------------------------------------------------#
-            part2_hp = image[int(1399 * height / 1440):int(1413 * height / 1440),int(172 * width / 2560):int(279 * width / 2560)]
+            part2_hp = image[int(1399 * height / 1440):int(1413 * height / 1440),int(166 * width / 2560):int(273 * width / 2560)]
             b, g, r = cv2.split(part2_hp)
-            r[r > 150] = 255
-            r[r <= 150] = 0
+            r[r > 180] = 255
+            r[r <= 180] = 0
             hp = int(np.round((100 * np.count_nonzero(r[5] == 255)/107))/(width / 2560))
-            # if hp > last_hp:
-            #     hp = last_hp
-            # else:
-            #     last_hp = hp
-            part2_ac = image[int(1399 * height / 1440):int(1413 * height / 1440),int(448 * width / 2560):int(555 * width / 2560)]
+            hp, hp_window = moving_mode_filter(hp, window=hp_window)
+            if hp == 0:
+                hp = last_hp
+            else:
+                last_hp = hp
+
+            name = 'result/' +  str(ctime) + 'hp.png'
+            cv2.imwrite(name, r)
+       
+            part2_ac = image[int(1399 * height / 1440):int(1413 * height / 1440),int(443 * width / 2560):int(550 * width / 2560)]
             part2_ac = cv2.cvtColor(part2_ac, cv2.COLOR_BGR2GRAY)
             part2_ac = cv2.inRange(part2_ac, 180, 255)
             ac = int(np.round((100*np.count_nonzero(part2_ac[5] == 255)/107))/(width / 2560))
-            # if ac > last_ac:
-            #     ac = last_ac
-            # else:
-            #     last_ac = ac
-            data_dict[str(ctime)]['hp_ac'] = [hp_filter(hp), ac_filter(ac)]
+            ac, ac_window = moving_mode_filter(ac, window=ac_window)
+            if ac == 0:
+                ac = last_ac
+            else:
+                last_ac = ac
+   
+            data_dict[str(ctime)]['hp_ac'] = [hp, ac]
+            data_dict[str(ctime)]['hp_window'] = list(hp_window)
+            data_dict[str(ctime)]['ac_window'] = list(ac_window)
         # ----------------------------------------------------important!!!!player died--------------------------------------------#
 
         # ----------------------------------------------------important!!!!player died--------------------------------------------#
@@ -280,7 +306,6 @@ def process_frame(frame_queue):
 
             # part5_concate = np.concatenate((part5_kill1, part5_kill2, part5_kill3, part5_kill4, part5_kill5),
             #                             axis=0)  # vertical
-
             part5_list = [part5_kill1, part5_kill2, part5_kill3, part5_kill4, part5_kill5]
 
             killers = []
@@ -288,13 +313,14 @@ def process_frame(frame_queue):
             
 
             for i in range(5):
-                results = reader.readtext(part5_list[i], allowlist='+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ', width_ths=0.7, paragraph=False)
+                background = part5_list[i][3, 275, : ]
+                part5_list[i] = remove_uniform_colors(part5_list[i], background)
+                results = reader.readtext(part5_list[i], allowlist='+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ', width_ths=0.4, paragraph=True)
                 
                 # text = ' '.join([result[1] for result in results])
             
                 m = 0
 
-                results = [result for result in results if result[2] >= 0.2]
                 for result in results:
                     # print(ctime, " ", result[1])
                     if len(results) == 0:
@@ -352,7 +378,7 @@ def process_frame(frame_queue):
                     count = 0
 
                     for split_killer in split_killers:
-                        if split_killer.lower() == 'bot':
+                        if split_killer.lower() == 'bot' or split_killer.lower() == 'but':
                             continue
 
                         # Try 3 or 4 tomorrow
@@ -360,10 +386,11 @@ def process_frame(frame_queue):
                             continue
                         distances = [Levenshtein.distance(split_killer, target) for target in name_list]
                         min_distance_index = distances.index(min(distances))
-                        closest_string_killer = list[min_distance_index]
+                        closest_string_killer = name_list[min_distance_index]
                         count = count + 1
                         
                         if count == 2:
+                            print(ctime)
                             concate_killers += " and " 
                             concate_killers += closest_string_killer
                             break
@@ -375,12 +402,14 @@ def process_frame(frame_queue):
                 for killee in killees:
                     split_killees = killee.split()
                     for split_killee in split_killees:
-                        if split_killee.lower() == 'bot':
+                        if split_killee.lower() == 'bot' or split_killee.lower() == 'but':
                             continue
 
+                        if len(split_killee) <= 2:
+                            continue
                         distances = [Levenshtein.distance(split_killee, target) for target in name_list]
                         min_distance_index = distances.index(min(distances))
-                        closest_string_killee = list[min_distance_index]
+                        closest_string_killee = name_list[min_distance_index]
                         concate_killees = closest_string_killee
                         updated_killees.append(closest_string_killee)
                 
@@ -389,7 +418,8 @@ def process_frame(frame_queue):
                     kill_list = []
                     if "athletechyinzcam" in concate_killers  or "athletechyinzcam" in concate_killees:
                         kill_list.append({concate_killers : concate_killees})
-                        # print(kill_list)
+                        name = 'result/' +  str(ctime) + 'frame.png'
+                        cv2.imwrite(name, image)
 
                         if {concate_killers : concate_killees} not in global_kill_dict:
                             global_kill_dict.append({concate_killers : concate_killees})
@@ -400,13 +430,13 @@ def process_frame(frame_queue):
 
                             if "athletechyinzcam" in concate_killees:
                                 killee_flg = 1
-                            else:
-                                killee_flg = 0
+                                
 
                         if "athletechyinzcam" in concate_killees:
                             player_alive = False
             
             data_dict[str(ctime)]['player_get_killed'] = killee_flg
+            killee_flg = 0
                         
     # ----------------------------------------------------------Kill----------------------------------------------------------#
         else:
@@ -418,7 +448,6 @@ def process_frame(frame_queue):
     end = time.time()
     dat = datetime.fromtimestamp(end)
     print('process end in: {}'.format(dat.strftime('%Y-%m-%d-%H-%M-%S-') + f'{dat.microsecond // 1000:03}'))
-    np.save('hp_record.npy', np.array(hp_ac))
     with open('../OCR/data.json', 'w') as f:
     # Use json.dump to write dict_data to the file
         json.dump(data_dict, f, indent=4)
@@ -452,6 +481,7 @@ if __name__ == '__main__':
     x = list(range(len(hp_ac_values)))
     p = figure(title="Player data over time", x_axis_label='Time', y_axis_label='Values')
     p1 = figure(width=1000, height=250, title="HP")
+    p1.line(x, player_death, line_color="purple")
     p1.line(x, hp_values, line_color="red")
 
     p2 = figure(width=1000, height=250, title="AC")
@@ -462,6 +492,7 @@ if __name__ == '__main__':
 
     p4 = figure(width=1000, height=250, title="death")
     p4.line(x, player_death, line_color="purple")
+
 
     grid = gridplot([[p1], [p2], [p3], [p4]])
     show(grid)
