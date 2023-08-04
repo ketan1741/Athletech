@@ -331,7 +331,7 @@ def process_frame(frame_queue):
 
                         n = 0
                         for split in splitlist:
-                            if (len(split) <= 3):
+                            if (len(split) <= 2):
                                 continue
                             if n % 2 == 0:
                                 killers.append(split)
