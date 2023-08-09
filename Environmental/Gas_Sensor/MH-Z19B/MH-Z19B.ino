@@ -30,8 +30,8 @@ void setup()
 {
   Serial.begin(9600);
 
-  mySerial.begin(BAUDRATE);                                // Uno example: Begin Stream with MHZ19 baudrate
-  myMHZ19.begin(mySerial);                                 // *Important, Pass your Stream reference
+  mySerial.begin(BAUDRATE);
+  myMHZ19.begin(mySerial);
 }
 
 void loop()

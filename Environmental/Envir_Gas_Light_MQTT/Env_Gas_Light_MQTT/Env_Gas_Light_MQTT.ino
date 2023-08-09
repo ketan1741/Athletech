@@ -35,17 +35,12 @@ MqttClient mqttClient(wifiClient);
 const char* mqtt_username = "aws_server";
 const char* mqtt_password = "esports_data";
 
-const char broker[] = "ec2-3-133-108-120.us-east-2.compute.amazonaws.com";
+const char broker[] = "ec2-3-145-8-89.us-east-2.compute.amazonaws.com";
 int        port     = 8883;
-const char topic[]  = "Pressure";
-const char topic2[]  = "Approx. Altitude";
-const char topic3[]  = "Humidity";
-const char topic4[]  = "Raw_CO2";
-const char topic5[]  = "Adjusted_CO2";
-const char topic6[] = "Light(lx)";
+const char topic[]  = "Environment";
 
 //set interval for sending messages (milliseconds)
-const long interval = 1000;
+const long interval = 250;
 unsigned long previousMillis = 0;
 
 int count = 0;
@@ -137,60 +132,64 @@ void loop() {
     previousMillis = currentMillis;
 
     //record random value from A0, A1 and A2
-    int Rvalue = bme.readPressure() / 100.0F;
-    int Rvalue2 = bme.readAltitude(SEALEVELPRESSURE_HPA);
-    int Rvalue3 = bme.readHumidity();
-    double Rvalue4 = myMHZ19.getCO2Raw();
-    double Rvalue5 = 6.60435861e+15 * exp(-8.78661228e-04 * Rvalue4);      // Exponential equation for Raw & CO2 relationship
-    float Rvalue6 = lightMeter.readLightLevel();
+    float Rvalue = bme.readTemperature();
+    float Rvalue2 = bme.readPressure() / 100.0F;
+    float Rvalue3 = bme.readAltitude(SEALEVELPRESSURE_HPA);
+    float Rvalue4 = bme.readHumidity();
+    float Rvalue5 = lightMeter.readLightLevel()
+    double adjustedCO2 = myMHZ19.getCO2Raw();
+    adjustedCO2 = 6.60435861e+15 * exp(-8.78661228e-04 * adjustedCO2);
+    float Rvalue6 = adjustedCO2;
 
-    Serial.print("Sending message to topic: ");
-    Serial.println(topic);
-    Serial.println(Rvalue);
+    Serial.print(Rvalue);
+    Serial.print(",");
+    Serial.print(Rvalue2);
+    Serial.print(",");
+    Serial.print(Rvalue3);
+    Serial.print(",");
+    Serial.print(Rvalue4);
+    Serial.print(",");
+    Serial.print(Rvalue5);
+    Serial.print(",");
+    Serial.print(Rvalue6);
+    // Serial.print("Sending message to topic: ");
+    // Serial.println(topic);
+    // Serial.println(Rvalue);
 
-    Serial.print("Sending message to topic: ");
-    Serial.println(topic2);
-    Serial.println(Rvalue2);
+    // Serial.print("Sending message to topic: ");
+    // Serial.println(topic2);
+    // Serial.println(Rvalue2);
 
-    Serial.print("Sending message to topic: ");
-    Serial.println(topic3);
-    Serial.println(Rvalue3);
+    // Serial.print("Sending message to topic: ");
+    // Serial.println(topic3);
+    // Serial.println(Rvalue3);
 
-    Serial.print("Sending message to topic: ");
-    Serial.println(topic4);
-    Serial.println(Rvalue4);
+    // Serial.print("Sending message to topic: ");
+    // Serial.println(topic4);
+    // Serial.println(Rvalue4);
 
-    Serial.print("Sending message to topic: ");
-    Serial.println(topic5);
-    Serial.println(Rvalue5);
+    // Serial.print("Sending message to topic: ");
+    // Serial.println(topic5);
+    // Serial.println(Rvalue5);
 
-    Serial.print("Sending message to topic: ");
-    Serial.println(topic6);
-    Serial.println(Rvalue6);
+    // Serial.print("Sending message to topic: ");
+    // Serial.println(topic6);
+    // Serial.println(Rvalue6);
 
     // send message, the Print interface can be used to set the message contents
     mqttClient.beginMessage(topic);
     mqttClient.print(Rvalue);
-    mqttClient.endMessage();
-
-    mqttClient.beginMessage(topic2);
+    mqttClient.print(",");
     mqttClient.print(Rvalue2);
-    mqttClient.endMessage();
-
-    mqttClient.beginMessage(topic3);
+    mqttClient.print(",");
     mqttClient.print(Rvalue3);
-    mqttClient.endMessage();
-
-    mqttClient.beginMessage(topic4);
+    mqttClient.print(",");
     mqttClient.print(Rvalue4);
-    mqttClient.endMessage();
-
-    mqttClient.beginMessage(topic5);
+    mqttClient.print(",");
     mqttClient.print(Rvalue5);
-    mqttClient.endMessage();
-
-    mqttClient.beginMessage(topic6);
+    mqttClient.print(",");
     mqttClient.print(Rvalue6);
+    mqttClient.println();
     mqttClient.endMessage();
 
     Serial.println();
