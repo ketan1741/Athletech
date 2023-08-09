@@ -1,22 +1,25 @@
 import statistics
-from collections import deque
 import torch.nn as nn
+from collections import deque
 import torch.nn.functional as F
 from torchvision import transforms
 from multiprocessing import Process, Queue
 from bokeh.plotting import figure, show, output_file
+from bokeh.sampledata.iris import flowers
 from bokeh.io import output_notebook
 from bokeh.layouts import gridplot
 import matplotlib.pyplot as plt
+from datetime import datetime
 import easyocr
 import torch
 import cv2
 import time
 import Levenshtein
 import numpy as np
-from datetime import datetime
-import cv2
 import json
+import copy
+
+import av
 name_list = ["athletechyinzcam", "Albert", "Allen", "Bert", "Bob", "Cecil", "Clarence", "Elliot", "Elmer", "Ernie", "Eugene", "Fergus", "Ferris", "Frank", "Frasier", "Fred", "George", "Graham", "Harvey", "Irwin", "Larry", "Lester", "Marvin", "Neil", "Niles", "Oliver", "Opie", "Ryan", "Toby", "Ulric", "Ulysses", "Uri", "Waldo", "Wally", "Walt", "Wesley", "Yanni", "Yogi", "Yuri", "Alfred", "Bill", "Brandon", "Calvin", "Dean", "Dustin", "Ethan", "Harold", "Henry", "Irving", "Jason", "Jenssen", "Josh", "Martin", "Nick", "Norm", "Orin", "Pat", "Perry", "Ron", "Shawn", "Tim", "Will", "Wyatt", "Adam", "Andy", "Chris", "Colin", "Dennis", "Doug", "Duffy", "Gary", "Grant", "Greg", "Ian", "Jerry", "Jon", "Keith", "Mark", "Matt", "Mike", "Nate", "Paul", "Scott", "Steve", "Tom", "Yahn", "Adrian", "Bank", "Brad", "Connor", "Dave", "Dan", "Derek", "Don", "Eric", "Erik", "Finn", "Jeff", "Kevin", "Reed", "Rick", "Ted", "Troy", "Wade", "Wayne", "Xander", "Xavier", "Brian", "Chad", "Chet", "Gabe", "Hank", "Ivan", "Jim", "Joe", "John", "Tony", "Tyler", "Victor", "Vladimir", "Zane", "Zim", "Cory", "Quinn", "Seth", "Vinny", "Arnold", "Brett", "Kurt", "Kyle", "Moe", "Quade", "Quintin", "Ringo", "Rip", "Zach", "Cliffe", "Crusher", "Gunner", "Minh", "Garret", "Phoenix", "Ridgway", "Rock", "Shark", "Steel", "Stone", "Wolf", "Vitaliy", "Zed" ]
 weapon_list = ['AWP', 'G3SG1', 'Galil AR', 'M4A4', 'M4A1-S', 'SCAR-20', 'SG 553', 'SSG 08', '	FAMAS',
                'AUG', 'AK-47', 'USP-S', 'Tec-9', 'Glock-18', 'Desert Eagle', 'P250', 'Dual Berettas', 'XM1014',
@@ -27,6 +30,7 @@ winner_list = ['TerroristsWin', 'Counter-TerroristsWin']
 # average frame reading time: 0.0014 sec
 # average ocr processing time: 0.1 sec    
 from collections import Counter
+
 
 def multimode(window):
     counter = Counter(window)
@@ -42,10 +46,18 @@ def moving_mode_filter(data, window):
     return modes[0], window
     
 
-def remove_uniform_colors(image, background, threshold=20):
-    diff = np.ptp(image, axis=-1)  
-    mask = diff < threshold  
-    image[mask] = background  
+def mask_colors(image):
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    h, s, v = cv2.split(image)
+    # mask_blue = (100 < h) & (h < 160) & (s > 40) & (v > 110)
+    # mask_yellow = (15 < h) & (h < 50) & (s > 70) & (v > 110)
+    # binary = np.zeros_like(h)
+    # binary[mask_blue] = 255
+    # binary[mask_yellow] = 255
+    # return binary
+    background_mask = v < 190
+    image[background_mask] = [0, 0, 0]
+    image = cv2.cvtColor(image, cv2.COLOR_HSV2BGR)
     return image
 
 
@@ -68,7 +80,8 @@ def read_frames(frame_queue, index):
         # put the frame into the queue to be processed
         frame_queue.put(image)
         index += 1
-        if index == 5000:
+
+        if index == 2500:
             end = time.time()
             dat = datetime.fromtimestamp(end)
             frame_queue.put(None)  # signal that we are done reading frames
@@ -78,6 +91,7 @@ def read_frames(frame_queue, index):
             break
     cap.release()
     cv2.destroyAllWindows()
+
 # Perform OCR using EasyOCR
 
 def process_frame(frame_queue):
@@ -118,15 +132,12 @@ def process_frame(frame_queue):
         # cv2.imwrite(name, image)
         height, width, _ = image.shape
         data_dict[str(ctime)] = {}
-        # ----------------------------------------------------------score----------------------------------------------------------#
-        data_dict[str(ctime)]['player_kill_other'] = killer_flg
-        killer_flg = 0
-        
+        # ----------------------------------------------------------score----------------------------------------------------------#        
         if old_round:
             winner = image[int(290 * height / 1440):int(325 * height / 1440), int(1100 * width / 2560):int(1460 * width / 2560)]
             # name = 'result/' +  str(ctime) + 'winner.png'
             # cv2.imwrite(name, winner)
-
+            data_dict[str(ctime)]['new_round'] = int(not old_round)
             results = reader.readtext(winner, allowlist='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-',
                                     paragraph=True, batch_size=8)
             winner_pr = ' '.join([result[1] for result in results])
@@ -147,6 +158,7 @@ def process_frame(frame_queue):
         else:
             index_tr += 1
             if index_tr == 160:
+                data_dict[str(ctime)]['new_round'] = int(not old_round)
                 if min_distance_index_name == 0:
                     ss_score = ss_score + 1
                     old_round = True
@@ -162,9 +174,10 @@ def process_frame(frame_queue):
                     data_dict[str(ctime)]['score'] = [cs_score, ss_score]
                     hp_window = deque([100 for _ in range(window_size)], maxlen=window_size)
                     ac_window = deque([100 for _ in range(window_size)], maxlen=window_size)
-
                 index_tr = 0
+
             else:
+                data_dict[str(ctime)]['new_round'] = int(old_round)
                 data_dict[str(ctime)]['score'] = [cs_score, ss_score]
                 
         # # ----------------------------------------------------------score--------------------------------------------------------#
@@ -225,8 +238,8 @@ def process_frame(frame_queue):
             else:
                 last_hp = hp
 
-            name = 'result/' +  str(ctime) + 'hp.png'
-            cv2.imwrite(name, r)
+            # name = 'result/' +  str(ctime) + 'hp.png'
+            # cv2.imwrite(name, r)
        
             part2_ac = image[int(1399 * height / 1440):int(1413 * height / 1440),int(443 * width / 2560):int(550 * width / 2560)]
             part2_ac = cv2.cvtColor(part2_ac, cv2.COLOR_BGR2GRAY)
@@ -239,8 +252,8 @@ def process_frame(frame_queue):
                 last_ac = ac
    
             data_dict[str(ctime)]['hp_ac'] = [hp, ac]
-            data_dict[str(ctime)]['hp_window'] = list(hp_window)
-            data_dict[str(ctime)]['ac_window'] = list(ac_window)
+            # data_dict[str(ctime)]['hp_window'] = list(hp_window)
+            # data_dict[str(ctime)]['ac_window'] = list(ac_window)
         # ----------------------------------------------------important!!!!player died--------------------------------------------#
 
         # ----------------------------------------------------important!!!!player died--------------------------------------------#
@@ -305,22 +318,27 @@ def process_frame(frame_queue):
                         int(2000 * width / 2560):int(2550 * width / 2560)]
 
             # part5_concate = np.concatenate((part5_kill1, part5_kill2, part5_kill3, part5_kill4, part5_kill5),
-            #                             axis=0)  # vertical
-            part5_list = [part5_kill1, part5_kill2, part5_kill3, part5_kill4, part5_kill5]
-
-            killers = []
-            killees = []
+                                        #  axis=0)  # vertical
+            list_temp = [part5_kill1, part5_kill2, part5_kill3, part5_kill4, part5_kill5]
+            part5_list = copy.deepcopy(list_temp)
             
-
+            
             for i in range(5):
-                background = part5_list[i][3, 275, : ]
-                part5_list[i] = remove_uniform_colors(part5_list[i], background)
-                results = reader.readtext(part5_list[i], allowlist='+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ', width_ths=0.4, paragraph=True)
+                alpha_cha = cv2.cvtColor(part5_list[i], cv2.COLOR_BGR2BGRA)[:,:,3]
+                kill_info = mask_colors(part5_list[i])
+                # kill_info = part5_list[i]
+                # name = '../OCR/result/' +  str(ctime) + 'frame.png'
+                # cv2.imwrite(name, kill_info)
+
+                killers = []
+                killees = []
+                results = reader.readtext(kill_info, allowlist='+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ', width_ths=0.7, paragraph=True)
+
                 
                 # text = ' '.join([result[1] for result in results])
             
                 m = 0
-
+                
                 for result in results:
                     # print(ctime, " ", result[1])
                     if len(results) == 0:
@@ -328,17 +346,28 @@ def process_frame(frame_queue):
 
                     if len(results) == 1:
                         splitlist = result[1].split()
+                        splitlist = [split for split in splitlist if len(split) > 2]
+
 
                         n = 0
-                        for split in splitlist:
-                            if (len(split) <= 2):
-                                continue
-                            if n % 2 == 0:
-                                killers.append(split)
-                            if n % 2 == 1:
-                                killees.append(split)
+                        
+                        if len(splitlist) == 2:
+                            for split in splitlist:
+                                if n % 2 == 0:
+                                    killers.append(split)
+                                if n % 2 == 1:
+                                    killees.append(split)
 
-                            n = n + 1
+                                n = n + 1
+
+                        if len(splitlist) == 3:
+                            for split in splitlist:
+                                if n == 0 or n == 1:
+                                    killers.append(split)
+                                if n == 2:
+                                    killees.append(split)
+
+                                n = n + 1
 
 
                     if len(results) == 2:
@@ -364,6 +393,7 @@ def process_frame(frame_queue):
 
                     m = m + 1
             
+
                 closest_string_killer = ''
                 closest_string_killee = ''
                 updated_killers = []
@@ -390,7 +420,6 @@ def process_frame(frame_queue):
                         count = count + 1
                         
                         if count == 2:
-                            print(ctime)
                             concate_killers += " and " 
                             concate_killers += closest_string_killer
                             break
@@ -418,12 +447,16 @@ def process_frame(frame_queue):
                     kill_list = []
                     if "athletechyinzcam" in concate_killers  or "athletechyinzcam" in concate_killees:
                         kill_list.append({concate_killers : concate_killees})
-                        name = 'result/' +  str(ctime) + 'frame.png'
-                        cv2.imwrite(name, image)
+                        
 
                         if {concate_killers : concate_killees} not in global_kill_dict:
                             global_kill_dict.append({concate_killers : concate_killees})
                             data_dict[str(ctime)]['kill_info'] = kill_list
+                            
+                            name = '../OCR/result/' +  str(ctime) + 'modify.png'
+                            cv2.imwrite(name, kill_info)
+                            name = '../OCR/result/' +  str(ctime) + 'origin.png'
+                            cv2.imwrite(name, part5_list[i])
 
                             if "athletechyinzcam" in concate_killers:
                                 killer_flg = 1
@@ -436,6 +469,8 @@ def process_frame(frame_queue):
                             player_alive = False
             
             data_dict[str(ctime)]['player_get_killed'] = killee_flg
+            data_dict[str(ctime)]['player_kill_other'] = killer_flg
+            killer_flg = 0
             killee_flg = 0
                         
     # ----------------------------------------------------------Kill----------------------------------------------------------#
@@ -447,6 +482,7 @@ def process_frame(frame_queue):
 
     end = time.time()
     dat = datetime.fromtimestamp(end)
+    print('start streaming:{}'.format(dat.strftime('%Y-%m-%d-%H-%M-%S-') + f'{dat.microsecond // 1000:03}'))
     print('process end in: {}'.format(dat.strftime('%Y-%m-%d-%H-%M-%S-') + f'{dat.microsecond // 1000:03}'))
     with open('../OCR/data.json', 'w') as f:
     # Use json.dump to write dict_data to the file
@@ -469,21 +505,22 @@ if __name__ == '__main__':
     p1.terminate()
     p2.terminate()
 
-    with open('data.json', 'r') as f:
+    with open('../OCR/data.json', 'r') as f:
         data_dict = json.load(f)
   
     hp_ac_values = [value['hp_ac'] for value in data_dict.values()]
     player_kills = [value['player_kill_other'] for value in data_dict.values()]
     player_death = [value['player_get_killed'] for value in data_dict.values()]
+    new_round = [value['new_round'] for value in data_dict.values()]
     hp_values = [item[0] for item in hp_ac_values]
     ac_values = [item[1] for item in hp_ac_values]
 
     x = list(range(len(hp_ac_values)))
     p = figure(title="Player data over time", x_axis_label='Time', y_axis_label='Values')
-    p1 = figure(width=1000, height=250, title="HP")
-    p1.line(x, player_death, line_color="purple")
-    p1.line(x, hp_values, line_color="red")
 
+    p1 = figure(width=1000, height=250, title="HP")
+    p1.line(x, hp_values, line_color="red")
+    
     p2 = figure(width=1000, height=250, title="AC")
     p2.line(x, ac_values, line_color="blue")
 
@@ -493,6 +530,16 @@ if __name__ == '__main__':
     p4 = figure(width=1000, height=250, title="death")
     p4.line(x, player_death, line_color="purple")
 
+    player_death = [i * 120 for i in player_death]
+    player_kills = [i * 135 for i in player_kills]
+    new_round = [i * 150 for i in new_round]
 
-    grid = gridplot([[p1], [p2], [p3], [p4]])
+    p5 = figure(width=1000, height=250, title="Game Log")
+    p5.line(x, player_death, line_color="purple", legend_label="get killed")
+    p5.line(x, player_kills, line_color="green", legend_label="kill other")
+    p5.line(x, new_round, line_color="blue", legend_label="new round")
+    p5.line(x, hp_values, line_color="red", legend_label="HP")
+
+
+    grid = gridplot([[p1], [p2], [p3], [p4], [p5]])
     show(grid)
